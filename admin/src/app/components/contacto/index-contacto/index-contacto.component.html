@@ -1,0 +1,79 @@
+<app-sidebar></app-sidebar>
+
+          <!-- Page title-->
+          <div class="border-bottom pt-5 mt-2 mb-5">
+            <h1 class="mt-2 mt-md-4 mb-3 pt-5">Cupones</h1>
+            <div class="d-flex flex-wrap flex-md-nowrap justify-content-between">
+              <p class="text-muted">Este módulo lista todos los mensajes recibidos.</p>
+    
+            </div>
+          </div>
+
+          <div class="card box-shadow-sm">
+                <div class="card-header">
+                    <h5 style="margin-bottom: 0px;">Los mensajes:</h5>
+                </div>
+
+                <div class="card-body" *ngIf="!load_data">
+                    <!-- Product review -->
+                    <div class="mb-4 pb-4 border-bottom" *ngFor="let item of mensajes | slice:(page-1) * pageSize: (page-1) * pageSize + pageSize  ;"> 
+                        <div class="row">
+                        <div class="col-md-3 col-sm-4 mb-sm-0 mb-3">
+                            <h3 class="mb-2 fs-lg"> {{item.cliente}} </h3>
+                            <span class="d-block mb-3 fs-sm text-muted"> {{item.createdAt|date}} </span>
+
+                            <span class="badge bg-primary" *ngIf="item.estado == 'Abierto'">  {{item.estado}} </span>
+                            <span class="badge bg-danger" *ngIf="item.estado == 'Cerrado'">  {{item.estado}} </span>
+
+                        </div>
+                        <div class="col">
+                            <p class="mb-3">
+                            <a class="me-1 fw-bold text-decoration-none"> {{item.correo}} e</a>
+                            {{item.mensaje}}
+                            </p>
+                            <div class="d-flex justify-content-between">
+                            <a class="nav-link p-0 fs-sm" data-toggle="modal" *ngIf="item.estado == 'Abierto'"  [attr.data-target]="'#estadomodal-'+item._id">
+                                <i class="ci-chat me-2 fs-base align-middle mt-n1" ></i>
+                                Cerrar mensaje.
+                            </a>
+
+                            <div class="modal fade" id="estadomodal-{{item._id}}" tabindex="-1" style="display: none;" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h4 class="modal-title">Desea cerrar el mensaje? </h4>
+                                      <button class="btn-close" type="button" data-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <p class="fs-sm">¿Deseas cerrar este mensaje?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button class="btn btn-secondary btn-sm" type="button" data-dismiss="modal">Cancelar</button>
+                                      <button class="btn btn-primary btn-sm" (click)="cerrar(item._id)" type="button">Si, Cerrar</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body" *ngIf="load_data">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                                            <!-- Dark (default) spinner -->
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden"></span>
+                    </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer ">
+                  <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="mensajes.length" >
+
+                  </ngb-pagination>
+                </div>
+          </div>    
